@@ -8,6 +8,26 @@ export class Overlay {
   constructor(particleCount: number) {
     this.particleCount = particleCount;
     this.el = document.getElementById('overlay')!;
+
+    // Fullscreen toggle
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+    });
+
+    // Fade out hint after 5 seconds
+    const hint = document.getElementById('hint');
+    if (hint) {
+      setTimeout(() => {
+        hint.style.opacity = '0';
+        setTimeout(() => hint.remove(), 1000);
+      }, 5000);
+    }
   }
 
   update() {

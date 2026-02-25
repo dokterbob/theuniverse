@@ -17,10 +17,22 @@
         pointer-events: none;
         z-index: 10;
       }
+      #hint {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255, 255, 255, 0.5);
+        font: 13px/1.4 monospace;
+        pointer-events: none;
+        z-index: 10;
+        transition: opacity 1s;
+      }
     </style>
   </head>
   <body>
     <div id="overlay"></div>
+    <div id="hint">press F for fullscreen</div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
