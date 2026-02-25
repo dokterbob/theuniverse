@@ -1,13 +1,17 @@
 import type { ParticleSystem } from '../particles/ParticleSystem.ts';
 
-// Precomputed color stops for velocity-based coloring
-// Slow (low KE) = warm red/orange, Fast = blue-white
+// Spectral-class star colors (O through M), saturated for visual impact.
+// Real sRGB values from stellar spectra (Harre 2021 / Vendian) with
+// saturation boosted ~2.5x in HSL to make hue differences pop.
+// Velocity maps to temperature: fast = hot O/B (blue), slow = cool K/M (orange).
 const COLOR_STOPS = [
-  { speed: 0, r: 1.0, g: 0.3, b: 0.1 },   // deep red-orange
-  { speed: 5, r: 1.0, g: 0.6, b: 0.2 },   // orange
-  { speed: 10, r: 1.0, g: 0.9, b: 0.5 },   // yellow-white
-  { speed: 20, r: 0.6, g: 0.8, b: 1.0 },   // blue-white
-  { speed: 40, r: 0.4, g: 0.6, b: 1.0 },   // blue
+  { speed: 0,  r: 1.000, g: 0.620, b: 0.000 },  // M — orange
+  { speed: 5,  r: 1.000, g: 0.700, b: 0.318 },  // K — orange-yellow
+  { speed: 10, r: 1.000, g: 0.922, b: 0.836 },  // G — warm white
+  { speed: 15, r: 0.929, g: 0.922, b: 1.000 },  // F — near-white (cool)
+  { speed: 25, r: 0.584, g: 0.686, b: 1.000 },  // A — blue-white
+  { speed: 35, r: 0.337, g: 0.498, b: 1.000 },  // B — blue
+  { speed: 45, r: 0.220, g: 0.388, b: 1.000 },  // O — deep blue
 ];
 
 function lerpColor(speed: number): [number, number, number] {
