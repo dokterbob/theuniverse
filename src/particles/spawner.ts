@@ -9,6 +9,11 @@ function gaussianRandom(): number {
   return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
 
+// Salpeter IMF: dN/dM ∝ M^(-2.35), inverse CDF constants
+const ALPHA1 = -1.35; // α + 1 where α = -2.35
+const M_LO_A = Math.pow(MIN_MASS, ALPHA1);
+const M_HI_A = Math.pow(MAX_MASS, ALPHA1);
+
 export function spawnBigBang(ps: ParticleSystem) {
   const { count, positions, velocities, masses, sizes } = ps;
 
@@ -30,8 +35,8 @@ export function spawnBigBang(ps: ParticleSystem) {
     velocities[i3 + 1] = (y / dist) * speed;
     velocities[i3 + 2] = (z / dist) * speed;
 
-    // Random mass
-    masses[i] = MIN_MASS + Math.random() * (MAX_MASS - MIN_MASS);
+    // Salpeter IMF: dN/dM ∝ M^(-2.35), sampled via inverse CDF
+    masses[i] = Math.pow(M_LO_A + Math.random() * (M_HI_A - M_LO_A), 1 / ALPHA1);
     sizes[i] = 0.1 + masses[i] * 0.08;
   }
 }
