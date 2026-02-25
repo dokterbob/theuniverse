@@ -22,7 +22,7 @@ export function createScene() {
     0.1,
     1000
   );
-  camera.position.set(0, 0, 40);
+  camera.position.set(0, 0, 14);
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));

@@ -32,6 +32,9 @@ function animate() {
   updateColors(ps);
   ps.syncToGPU();
 
+  // Slow drift toward the origin
+  camera.position.multiplyScalar(1 - 0.002 * frameDt);
+
   controls.update();
   composer.render();
   overlay.update();
