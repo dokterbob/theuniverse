@@ -18,3 +18,8 @@ export const BLOOM_THRESHOLD = 0.1;
 export const PARTICLE_SIZE = 0.15;
 export const MIN_MASS = 0.5;
 export const MAX_MASS = 2.0;
+
+// Blackbody color mapping
+export const T_MIN = 1500;    // K — deep red/orange (M-class stars)
+export const T_MAX = 30000;   // K — hot blue (O-class stars)
+export const KE_REF = 900;    // reference KE mapping to T_MAX (0.5 * MAX_MASS * ~30²)
