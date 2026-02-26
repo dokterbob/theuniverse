@@ -23,3 +23,4 @@ export const MAX_MASS = 2.0;
 export const T_MIN = 1500;    // K — deep red/orange (M-class stars)
 export const T_MAX = 30000;   // K — hot blue (O-class stars)
 export const KE_REF = 900;    // reference KE mapping to T_MAX (0.5 * MAX_MASS * ~30²)
+export const SATURATION_BOOST = 1.8; // push channels away from luminance (1.0 = no change)

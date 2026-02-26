@@ -1,5 +1,5 @@
 import type { ParticleSystem } from '../particles/ParticleSystem.ts';
-import { T_MIN, T_MAX, KE_REF } from '../config.ts';
+import { T_MIN, T_MAX, KE_REF, SATURATION_BOOST } from '../config.ts';
 
 /**
  * Attempt at blackbody temperature → sRGB via Tanner Helland's analytic fit
@@ -54,7 +54,14 @@ export function updateColors(ps: ParticleSystem) {
     const t = Math.min(ke / KE_REF, 1);
     const kelvin = T_MIN + tRange * t;
 
-    const [r, g, b] = blackbodyRGB(kelvin);
+    let [r, g, b] = blackbodyRGB(kelvin);
+
+    // Boost saturation by pushing channels away from luminance
+    const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    r = Math.min(Math.max(lum + (r - lum) * SATURATION_BOOST, 0), 1);
+    g = Math.min(Math.max(lum + (g - lum) * SATURATION_BOOST, 0), 1);
+    b = Math.min(Math.max(lum + (b - lum) * SATURATION_BOOST, 0), 1);
+
     colors[i3] = r;
     colors[i3 + 1] = g;
     colors[i3 + 2] = b;
