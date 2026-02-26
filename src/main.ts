@@ -1,7 +1,7 @@
 import { createScene } from './scene.ts';
 import { createControls } from './controls.ts';
 import { ParticleSystem } from './particles/ParticleSystem.ts';
-import { spawnBigBang } from './particles/spawner.ts';
+import { spawnBigBang, spawnRange } from './particles/spawner.ts';
 import { Integrator } from './physics/integrator.ts';
 import { updateColors } from './rendering/colors.ts';
 import { Overlay } from './ui/overlay.ts';
@@ -17,7 +17,17 @@ ps.syncToGPU();
 scene.add(ps.points);
 
 const integrator = new Integrator();
-const overlay = new Overlay(PARTICLE_COUNT);
+
+const overlay = new Overlay(PARTICLE_COUNT, (newCount: number) => {
+  const oldCount = ps.count;
+  ps.resize(newCount);
+  if (newCount > oldCount) {
+    spawnRange(ps, oldCount, newCount);
+  }
+  updateColors(ps);
+  ps.syncToGPU();
+  overlay.setParticleCount(newCount);
+});
 
 let lastTime = performance.now();
 

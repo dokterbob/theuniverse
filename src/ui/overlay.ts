@@ -4,19 +4,35 @@ export class Overlay {
   private lastTime = performance.now();
   private fps = 0;
   private particleCount: number;
+  private fadeTimer: ReturnType<typeof setTimeout> | null = null;
+  private onResize: ((newCount: number) => void) | null = null;
 
-  constructor(particleCount: number) {
+  constructor(particleCount: number, onResize?: (newCount: number) => void) {
     this.particleCount = particleCount;
+    this.onResize = onResize ?? null;
     this.el = document.getElementById('overlay')!;
+    this.el.style.transition = 'opacity 0.5s';
 
-    // Fullscreen toggle
+    this.resetFadeTimer();
+
     window.addEventListener('keydown', (e) => {
+      // Show overlay on any key press
+      this.el.style.opacity = '1';
+      this.resetFadeTimer();
+
       if (e.key === 'f' || e.key === 'F') {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen();
         } else {
           document.exitFullscreen();
         }
+      }
+
+      if (e.key === 'ArrowUp' && this.onResize) {
+        this.onResize(this.particleCount + 1000);
+      }
+      if (e.key === 'ArrowDown' && this.onResize) {
+        this.onResize(Math.max(1000, this.particleCount - 1000));
       }
     });
 
@@ -28,6 +44,17 @@ export class Overlay {
         setTimeout(() => hint.remove(), 1000);
       }, 5000);
     }
+  }
+
+  private resetFadeTimer() {
+    if (this.fadeTimer !== null) clearTimeout(this.fadeTimer);
+    this.fadeTimer = setTimeout(() => {
+      this.el.style.opacity = '0';
+    }, 3000);
+  }
+
+  setParticleCount(count: number) {
+    this.particleCount = count;
   }
 
   update() {

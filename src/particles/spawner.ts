@@ -14,10 +14,10 @@ const ALPHA1 = -1.35; // α + 1 where α = -2.35
 const M_LO_A = Math.pow(MIN_MASS, ALPHA1);
 const M_HI_A = Math.pow(MAX_MASS, ALPHA1);
 
-export function spawnBigBang(ps: ParticleSystem) {
-  const { count, positions, velocities, masses, sizes } = ps;
+export function spawnRange(ps: ParticleSystem, from: number, to: number) {
+  const { positions, velocities, masses, sizes } = ps;
 
-  for (let i = 0; i < count; i++) {
+  for (let i = from; i < to; i++) {
     const i3 = i * 3;
 
     // Gaussian cluster near origin
@@ -39,4 +39,8 @@ export function spawnBigBang(ps: ParticleSystem) {
     masses[i] = Math.pow(M_LO_A + Math.random() * (M_HI_A - M_LO_A), 1 / ALPHA1);
     sizes[i] = 0.1 + masses[i] * 0.08;
   }
+}
+
+export function spawnBigBang(ps: ParticleSystem) {
+  spawnRange(ps, 0, ps.count);
 }

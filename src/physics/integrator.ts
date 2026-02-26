@@ -55,8 +55,8 @@ export class Integrator {
       this.initialized = true;
     }
 
-    // Swap in latest accelerations from the worker
-    if (this.currentAccelerations) {
+    // Swap in latest accelerations from the worker (skip if size changed mid-flight)
+    if (this.currentAccelerations && this.currentAccelerations.length === ps.accelerations.length) {
       ps.accelerations.set(this.currentAccelerations);
     }
 

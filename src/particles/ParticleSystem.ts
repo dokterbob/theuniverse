@@ -70,6 +70,37 @@ export class ParticleSystem {
     this.points = new THREE.Points(this.geometry, this.material);
   }
 
+  resize(newCount: number) {
+    const oldCount = this.count;
+    const copyCount = Math.min(oldCount, newCount);
+
+    const newPositions = new Float32Array(newCount * 3);
+    const newVelocities = new Float32Array(newCount * 3);
+    const newAccelerations = new Float32Array(newCount * 3);
+    const newMasses = new Float32Array(newCount);
+    const newColors = new Float32Array(newCount * 3);
+    const newSizes = new Float32Array(newCount);
+
+    newPositions.set(this.positions.subarray(0, copyCount * 3));
+    newVelocities.set(this.velocities.subarray(0, copyCount * 3));
+    newAccelerations.set(this.accelerations.subarray(0, copyCount * 3));
+    newMasses.set(this.masses.subarray(0, copyCount));
+    newColors.set(this.colors.subarray(0, copyCount * 3));
+    newSizes.set(this.sizes.subarray(0, copyCount));
+
+    this.positions = newPositions;
+    this.velocities = newVelocities;
+    this.accelerations = newAccelerations;
+    this.masses = newMasses;
+    this.colors = newColors;
+    this.sizes = newSizes;
+    this.count = newCount;
+
+    this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
+    this.geometry.setAttribute('customColor', new THREE.BufferAttribute(this.colors, 3));
+    this.geometry.setAttribute('size', new THREE.BufferAttribute(this.sizes, 1));
+  }
+
   syncToGPU() {
     this.geometry.attributes.position.needsUpdate = true;
     (this.geometry.attributes.customColor as THREE.BufferAttribute).needsUpdate = true;
